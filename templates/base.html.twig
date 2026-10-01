@@ -19,6 +19,15 @@
         {% endif %}
     </head>
     <body>
+        {% if is_granted('ROLE_ADMIN') %}
+        <nav>
+            <a href="{{ path('app_admin_product_index') }}">Produits</a>
+            <a href="{{ path('app_admin_category_index') }}">Catégories</a>
+            <a href="{{ path('app_logout') }}">Deconnexion</a>
+            <p>Bonjour, {{ app.user.firstName }}</p>
+        </nav>
+        {% else %}
+
         <nav>
             <a href="{{ path('app_home') }}">Accueil</a>
             <a href="{{ path('app_product_index') }}">Produits</a>
@@ -26,6 +35,6 @@
         </nav>
 
         {% block body %}{% endblock %}
-
+        {% endif %}
     </body>
 </html>
