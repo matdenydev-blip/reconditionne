@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des produits{% endblock %}
+
+{% block body %}
+    <h1>Liste des produits</h1>
+
+    <a href="{{ path('app_admin_product_new') }}">Ajouter un produit</a>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nom</th>
+                <th>Description</th>
+                <th>Prix</th>
+                <th>État</th>
+                <th>Catégorie</th>
+                <th>Date d'ajout</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for product in products %}
+            <tr>
+                <td>{{ product.id }}</td>
+                <td>{{ product.name }}</td>
+                <td>{{ product.description }}</td>
+                <td>{{ product.price }} €</td>
+                <td>{{ product.state }}</td>
+                <td>{{ product.category.name }}</td>
+                <td>{{ product.createAt ? product.createAt|date('d/m/Y H:i') : '' }}</td>
+                <td>
+                    <a href="{{ path('app_admin_product_show', {'id': product.id}) }}">Voir</a>
+                    <a href="{{ path('app_admin_product_edit', {'id': product.id}) }}">Modifier</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="8">Aucun produit pour le moment.</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
