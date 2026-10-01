@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Accueil{% endblock %}
+
+{% block body %}
+    <h1> Bienvenue sur notre site de produits reconditionnés</h1>
+
+    <p> Nous vous proposons une sélection rigoureuse de produits reconditionnés.</p>
+    <p>Découvrez nos produits reconditionnés de haute qualité à des prix avantageux.</p>
+
+    <h2>Nos derniers produits :</h2>
+    <ul>
+    {% for product in products %}
+        <li>
+            <a href="{{ path('app_product_show', {id: product.id}) }}">{{ product.name }}</a>
+        </li>
+    {% endfor %}
+    </ul>
+    <a href="{{ path('app_product_index') }}">Voir tous les produits</a>
+{% endblock %}
