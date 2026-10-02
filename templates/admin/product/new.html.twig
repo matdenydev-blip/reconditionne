@@ -3,9 +3,11 @@
 {% block title %}Ajouter un produit{% endblock %}
 
 {% block body %}
-    <h1>Ajouter un produit</h1>
+    <h1 class="h2 mb-4">Ajouter un produit</h1>
 
-    {{ include('admin/product/_form.html.twig') }}
+    <div class="card card-body">
+        {{ include('admin/product/_form.html.twig') }}
+    </div>
 
-    <a href="{{ path('app_admin_product_index') }}">Retour à la liste</a>
+    <a class="btn btn-outline-secondary mt-3" href="{{ path('app_admin_product_index') }}"><i class="bi bi-arrow-left" aria-hidden="true"></i> Retour à la liste</a>
 {% endblock %}
