@@ -3,11 +3,14 @@
 {% block title %}Modifier la catégorie{% endblock %}
 
 {% block body %}
-    <h1>Modifier la catégorie</h1>
+    <h1 class="h2 mb-4">Modifier la catégorie</h1>
 
-    {{ include('admin/category/_form.html.twig', {'button_label': 'Mettre à jour'}) }}
+    <div class="card card-body">
+        {{ include('admin/category/_form.html.twig', {'button_label': 'Mettre à jour'}) }}
+    </div>
 
-    <a href="{{ path('app_admin_category_index') }}">Retour à la liste</a>
-
-    {{ include('admin/category/_delete_form.html.twig') }}
+    <div class="d-flex gap-2 mt-3">
+        <a class="btn btn-outline-secondary" href="{{ path('app_admin_category_index') }}"><i class="bi bi-arrow-left" aria-hidden="true"></i> Retour à la liste</a>
+        {{ include('admin/category/_delete_form.html.twig') }}
+    </div>
 {% endblock %}

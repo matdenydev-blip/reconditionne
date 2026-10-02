@@ -3,19 +3,31 @@
 {% block title %}Inscription{% endblock %}
 
 {% block body %}
-    <h1>Inscription</h1>
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-5">
+            <div class="card shadow-sm">
+                <div class="card-body p-4">
+                    <h1 class="h3 text-center mb-4">Inscription</h1>
 
-    {{ form_errors(registrationForm) }}
+                    {{ form_errors(registrationForm) }}
 
-    {{ form_start(registrationForm) }}
-        {{ form_row(registrationForm.firstName, {label: 'Prénom'}) }}
-        {{ form_row(registrationForm.lastName, {label: 'Nom'}) }}
-        {{ form_row(registrationForm.email) }}
-        {{ form_row(registrationForm.plainPassword, {
-            label: 'Mot de passe'
-        }) }}
-        {{ form_row(registrationForm.agreeTerms, {label: 'J\'accepte les conditions d\'utilisation'}) }}
+                    {{ form_start(registrationForm) }}
+                        {{ form_row(registrationForm.firstName, {label: 'Prénom'}) }}
+                        {{ form_row(registrationForm.lastName, {label: 'Nom'}) }}
+                        {{ form_row(registrationForm.email) }}
+                        {{ form_row(registrationForm.plainPassword, {label: 'Mot de passe'}) }}
+                        {{ form_row(registrationForm.agreeTerms, {label: 'J\'accepte les conditions d\'utilisation'}) }}
 
-        <button type="submit" class="btn">S'inscrire</button>
-    {{ form_end(registrationForm) }}
+                        <button type="submit" class="btn btn-primary w-100">
+                            <i class="bi bi-person-plus" aria-hidden="true"></i> S'inscrire
+                        </button>
+                    {{ form_end(registrationForm) }}
+
+                    <p class="text-center text-muted mt-4 mb-0">
+                        Déjà un compte ? <a href="{{ path('app_login') }}">Se connecter</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}

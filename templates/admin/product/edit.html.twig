@@ -3,11 +3,14 @@
 {% block title %}Modifier le produit{% endblock %}
 
 {% block body %}
-    <h1>Modifier le produit</h1>
+    <h1 class="h2 mb-4">Modifier le produit</h1>
 
-    {{ include('admin/product/_form.html.twig', {'button_label': 'Mettre à jour'}) }}
+    <div class="card card-body">
+        {{ include('admin/product/_form.html.twig', {'button_label': 'Mettre à jour'}) }}
+    </div>
 
-    <a href="{{ path('app_admin_product_index') }}">Retour à la liste</a>
-
-    {{ include('admin/product/_delete_form.html.twig') }}
+    <div class="d-flex gap-2 mt-3">
+        <a class="btn btn-outline-secondary" href="{{ path('app_admin_product_index') }}"><i class="bi bi-arrow-left" aria-hidden="true"></i> Retour à la liste</a>
+        {{ include('admin/product/_delete_form.html.twig') }}
+    </div>
 {% endblock %}
