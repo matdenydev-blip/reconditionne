@@ -4,6 +4,7 @@ namespace App\Tests\Controller;
 
 use App\Entity\Product;
 use App\Tests\DatabaseWebTestCase;
+use App\Entity\Category;
 
 class AdminCrudTest extends DatabaseWebTestCase
 {
@@ -77,5 +78,70 @@ class AdminCrudTest extends DatabaseWebTestCase
         $this->em->clear();
         $product = $this->em->getRepository(Product::class)->find($id);
         $this->assertNull($product);
+    }
+
+    public function testUnEtatInvalideEstRefuse(): void
+    {
+        $category = $this->creerCategorie();
+
+        $crawler = $this->client->request('GET', '/admin/produits/new');
+        $form = $crawler->selectButton('Enregistrer')->form();
+        $form['product[name]'] = 'Test';
+        $form['product[description]'] = 'Test';
+        $form['product[price]'] = '10.00';
+        $form['product[category]'] = $category->getId();
+        $form['product[state]']->disableValidation()->setValue('Excellent');
+        $this->client->submit($form);
+
+        $this->assertResponseStatusCodeSame(422);
+        $this->em->clear();
+        $this->assertCount(0, $this->em->getRepository(Product::class)->findAll());
+    }
+
+    public function testAjouterUneCategorie(): void
+    {
+        $crawler = $this->client->request('GET', '/admin/category/new');
+        $form = $crawler->selectButton('Enregistrer')->form();
+        $form['category[name]'] = 'Nouvelle Catégorie';
+        $form['category[description]'] = 'Description de la nouvelle catégorie';
+        $this->client->submit($form);
+
+        $this->assertResponseRedirects('/admin/category');
+
+        $this->em->clear();
+        $category = $this->em->getRepository(Category::class)->findOneBy(['name' => 'Nouvelle Catégorie']);
+        $this->assertNotNull($category);
+    }
+
+    public function testSupprimerUneCategorie(): void
+    {
+        $category = $this->creerCategorie('Categorie à supprimer');
+        $id = $category->getId();
+
+        $this->client->request('GET', '/admin/category/' . $id . '/edit');
+        $this->client->submitForm('Supprimer');
+
+        $this->assertResponseRedirects('/admin/category');
+
+        $this->em->clear();
+        $category = $this->em->getRepository(Category::class)->find($id);
+        $this->assertNull($category);
+    }
+
+    public function testSupprimerUneCategorieQuiContientDesProduitsEstRefuse(): void
+    {
+        $category = $this->creerCategorie('Smartphones');
+        $this->creerProduit($category, 'iPhone 12');
+        $id = $category->getId();
+
+        $this->client->request('GET', '/admin/category/' . $id . '/edit');
+        $this->client->submitForm('Supprimer');
+
+        $this->assertResponseRedirects('/admin/category');
+        $this->client->followRedirect();
+        $this->assertSelectorTextContains('body', 'contient encore des produits');
+
+        $this->em->clear();
+        $this->assertNotNull($this->em->getRepository(Category::class)->find($id));
     }
 }

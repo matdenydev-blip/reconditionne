@@ -71,7 +71,13 @@ final class CategoryController extends AbstractController
     #[Route('/{id}', name: 'app_admin_category_delete', methods: ['POST'])]
     public function delete(Request $request, Category $category, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$category->getId(), $request->getPayload()->getString('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $category->getId(), $request->getPayload()->getString('_token'))) {
+            if (!$category->getProducts()->isEmpty()) {
+                $this->addFlash('error', 'Cette catégorie contient encore des produits : impossible de la supprimer.');
+
+                return $this->redirectToRoute('app_admin_category_index', [], Response::HTTP_SEE_OTHER);
+            }
+
             $entityManager->remove($category);
             $entityManager->flush();
         }
