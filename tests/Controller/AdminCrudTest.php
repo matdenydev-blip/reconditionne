@@ -175,4 +175,36 @@ public function testUnPrixNegatifEstRefuse(): void
     $this->assertCount(0, $this->em->getRepository(Product::class)->findAll());
 }
 
+    public function testUnPrixVideEstRefuse(): void
+{
+    $category = $this->creerCategorie();
+
+    $crawler = $this->client->request('GET', '/admin/produits/new');
+    $form = $crawler->selectButton('Enregistrer')->form();
+    $form['product[name]'] = 'Sans prix';
+    $form['product[description]'] = 'Description';
+    $form['product[price]'] = '';
+    $form['product[state]'] = 'bon';
+    $form['product[category]'] = $category->getId();
+    $this->client->submit($form);
+
+    $this->assertResponseStatusCodeSame(422);
+}
+
+public function testUnNomTropLongEstRefuse(): void
+{
+    $category = $this->creerCategorie();
+
+    $crawler = $this->client->request('GET', '/admin/produits/new');
+    $form = $crawler->selectButton('Enregistrer')->form();
+    $form['product[name]'] = str_repeat('a', 300);
+    $form['product[description]'] = 'Description';
+    $form['product[price]'] = '10';
+    $form['product[state]'] = 'bon';
+    $form['product[category]'] = $category->getId();
+    $this->client->submit($form);
+
+    $this->assertResponseStatusCodeSame(422);
+}
+
 }
