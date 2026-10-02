@@ -3,12 +3,35 @@
 {% block title %}{{ product.name }}{% endblock %}
 
 {% block body %}
-    <h1 class="product-name">{{ product.name }}</h1>
-    <p class="product-description">{{ product.description }}</p>
-    <p class="product-price">{{ product.price }} €</p>
-    <p class="product-state">État : {{ product.state }}</p>
-    <p class="product-category">Catégorie : {{ product.category.name }}</p>
-    <p class="product-created-at">Ajouté le {{ product.createAt|date('d/m/Y') }}</p>
+    {% set badges = {'bon': 'success', 'moyen': 'warning', 'mauvais': 'danger'} %}
 
-    <a href="{{  path('app_product_index') }}">Retour à la liste des produits</a>
+    <nav aria-label="Fil d'Ariane">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ path('app_product_index') }}">Produits</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{{ product.name }}</li>
+        </ol>
+    </nav>
+
+    <div class="row g-5">
+        <div class="col-md-5">
+            <div class="bg-body-tertiary rounded-3 d-flex align-items-center justify-content-center" style="height: 280px;">
+                <i class="bi bi-phone display-1 text-secondary" aria-hidden="true"></i>
+            </div>
+        </div>
+
+        <div class="col-md-7">
+            <h1 class="product-name h2">{{ product.name }}</h1>
+            <p class="mb-2">
+                <span class="badge text-bg-{{ badges[product.state]|default('secondary') }}">État : {{ product.state }}</span>
+                <a class="badge text-bg-light text-decoration-none border" href="{{ path('app_category_show', {'id': product.category.id}) }}">Catégorie : {{ product.category.name }}</a>
+            </p>
+            <p class="product-price fs-2 fw-bold text-primary">{{ product.price }} €</p>
+            <p class="product-description">{{ product.description }}</p>
+            <p class="product-created-at text-muted small">Ajouté le {{ product.createAt|date('d/m/Y') }}</p>
+
+            <a class="btn btn-outline-secondary" href="{{ path('app_product_index') }}">
+                <i class="bi bi-arrow-left" aria-hidden="true"></i> Retour à la liste des produits
+            </a>
+        </div>
+    </div>
 {% endblock %}

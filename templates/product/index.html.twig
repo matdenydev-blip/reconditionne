@@ -3,17 +3,26 @@
 {% block title %}Nos produits{% endblock %}
 
 {% block body %}
-    <h1>Nos produits</h1>
+    {% set badges = {'bon': 'success', 'moyen': 'warning', 'mauvais': 'danger'} %}
 
-    {% for product in products %}
-        <div>
-            <h2><a href="{{ path('app_product_show', {'id': product.id}) }}">{{ product.name }}</a></h2>
-            <p>{{ product.price }} €</p>
-            <p>État : {{ product.state }}</p>
-            <p>Catégorie : {{ product.category.name }}</p>
-        </div>
-    {% else %}
-        <p>Aucun produit pour le moment.</p>
-    {% endfor %}
+    <h1 class="h2 mb-4">Nos produits</h1>
+
+    <div class="row g-4">
+        {% for product in products %}
+            <div class="col-sm-6 col-lg-4">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body">
+                        <span class="badge text-bg-{{ badges[product.state]|default('secondary') }}">{{ product.state }}</span>
+                        <h2 class="h5 card-title mt-2">
+                            <a class="stretched-link text-decoration-none text-dark" href="{{ path('app_product_show', {'id': product.id}) }}">{{ product.name }}</a>
+                        </h2>
+                        <p class="card-text text-muted mb-0">{{ product.category.name }}</p>
+                    </div>
+                    <div class="card-footer bg-white fw-bold">{{ product.price }} €</div>
+                </div>
+            </div>
+        {% else %}
+            <p class="text-center text-muted">Aucun produit pour le moment.</p>
+        {% endfor %}
+    </div>
 {% endblock %}
-
