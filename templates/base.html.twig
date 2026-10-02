@@ -20,20 +20,23 @@
     </head>
     <body>
         {% if is_granted('ROLE_ADMIN') %}
-        <nav>
-            <a href="{{ path('app_admin_product_index') }}">Produits</a>
-            <a href="{{ path('app_admin_category_index') }}">Catégories</a>
-            <a href="{{ path('app_logout') }}">Deconnexion</a>
-            <p>Bonjour, {{ app.user.firstName }}</p>
-        </nav>
+            <nav>
+                <a href="{{ path('app_admin_product_index') }}">Produits</a>
+                <a href="{{ path('app_admin_category_index') }}">Catégories</a>
+                <a href="{{ path('app_logout') }}">Deconnexion</a>
+                <p>Bonjour, {{ app.user.firstName }}</p>
+            </nav>
         {% else %}
 
-        <nav>
-            <a href="{{ path('app_home') }}">Accueil</a>
-            <a href="{{ path('app_product_index') }}">Produits</a>
-            <a href="{{ path('app_category_index') }}">Catégories</a>
-        </nav>
+            <nav>
+                <a href="{{ path('app_home') }}">Accueil</a>
+                <a href="{{ path('app_product_index') }}">Produits</a>
+                <a href="{{ path('app_category_index') }}">Catégories</a>
+            </nav>
         {% endif %}
+        {% for message in app.flashes('error') %}
+            <p class="flash-error">{{ message }}</p>
+        {% endfor %}
 
         {% block body %}{% endblock %}
     </body>
