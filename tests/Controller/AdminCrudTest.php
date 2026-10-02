@@ -144,4 +144,35 @@ class AdminCrudTest extends DatabaseWebTestCase
         $this->em->clear();
         $this->assertNotNull($this->em->getRepository(Category::class)->find($id));
     }
+
+    public function testUneCategorieSansDescriptionEstRefusee(): void
+{
+    $crawler = $this->client->request('GET', '/admin/category/new');
+    $form = $crawler->selectButton('Enregistrer')->form();
+    $form['category[name]'] = 'Sans description';
+    $this->client->submit($form);
+
+    $this->assertResponseStatusCodeSame(422);
+    $this->em->clear();
+    $this->assertCount(0, $this->em->getRepository(Category::class)->findAll());
+}
+
+public function testUnPrixNegatifEstRefuse(): void
+{
+    $category = $this->creerCategorie();
+
+    $crawler = $this->client->request('GET', '/admin/produits/new');
+    $form = $crawler->selectButton('Enregistrer')->form();
+    $form['product[name]'] = 'Prix négatif';
+    $form['product[description]'] = 'Description';
+    $form['product[price]'] = '-50';
+    $form['product[state]'] = 'bon';
+    $form['product[category]'] = $category->getId();
+    $this->client->submit($form);
+
+    $this->assertResponseStatusCodeSame(422);
+    $this->em->clear();
+    $this->assertCount(0, $this->em->getRepository(Product::class)->findAll());
+}
+
 }
